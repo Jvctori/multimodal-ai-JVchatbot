@@ -1,335 +1,380 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JV ChatBot</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/nerd-fonts/css/font-awesome.css" rel="stylesheet">
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='favicon.png') }}"
+      type="image/x-icon"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/nerd-fonts/css/font-awesome.css"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --primary-color: #ffffff; /* Branco */
-            --primary-hover: #888888; /* Cinza suave */
-            --bg-color: #000000; /* Preto */
-            --card-bg: #1a1a1a; /* Fundo de cartão escuro */
-            --text-primary: #ffffff; /* Texto branco */
-            --border-color: #444; /* Borda cinza escuro */
-            --button-bg: #333; /* Fundo dos botões */
-            --button-hover: #444; /* Hover do botão */
-            --input-bg: #222; /* Fundo dos inputs */
-        }
+      :root {
+        --primary-color: #ffffff; /* Branco */
+        --primary-hover: #888888; /* Cinza suave */
+        --bg-color: #000000; /* Preto */
+        --card-bg: #1a1a1a; /* Fundo de cartão escuro */
+        --text-primary: #ffffff; /* Texto branco */
+        --border-color: #444; /* Borda cinza escuro */
+        --button-bg: #333; /* Fundo dos botões */
+        --button-hover: #444; /* Hover do botão */
+        --input-bg: #222; /* Fundo dos inputs */
+      }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Fira Code', 'Courier New', monospace;
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        font-family: "Fira Code", "Courier New", monospace;
+        margin: 0;
+        padding: 0;
+      }
 
-        h1, h3 {
-            font-family: 'Fira Code', monospace;
-        }
+      h1,
+      h3 {
+        font-family: "Fira Code", monospace;
+      }
 
-        .chat-container {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            padding: 2rem;
-        }
+      .chat-container {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        padding: 2rem;
+      }
 
-        .command-hint {
-            background-color: var(--card-bg);
-            border: none;
-            border-radius: 12px;
-        }
+      .command-hint {
+        background-color: var(--card-bg);
+        border: none;
+        border-radius: 12px;
+      }
 
-        .command-tag {
-            background-color: #333;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+      .command-tag {
+        background-color: #333;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: "Fira Code", monospace;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
 
-        .command-tag:hover {
-            background-color: var(--primary-hover);
-        }
+      .command-tag:hover {
+        background-color: var(--primary-hover);
+      }
 
-        textarea {
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            border: 2px solid var(--border-color);
-            padding: 0.75rem;
-            border-radius: 8px;
-            width: 100%;
-            resize: vertical;
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-        }
+      textarea {
+        background-color: var(--input-bg);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+        padding: 0.75rem;
+        border-radius: 8px;
+        width: 100%;
+        resize: vertical;
+        font-family: "Fira Code", monospace;
+        font-size: 1rem;
+      }
 
-        textarea:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-        }
+      textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        background-color: var(--input-bg);
+        color: var(--text-primary);
+      }
 
-        .submit-btn {
-            background-color: var(--button-bg);
-            transition: all 0.2s ease;
-            font-size: 1rem;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            width: 100%;
-            text-align: center;
-            font-family: 'Fira Code', monospace;
-        }
+      .submit-btn {
+        background-color: var(--button-bg);
+        transition: all 0.2s ease;
+        font-size: 1rem;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        width: 100%;
+        text-align: center;
+        font-family: "Fira Code", monospace;
+      }
 
-        .submit-btn:hover {
-            background-color: var(--button-hover);
-            transform: translateY(-2px);
-        }
+      .submit-btn:hover {
+        background-color: var(--button-hover);
+        transform: translateY(-2px);
+      }
 
-        .result-box {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
+      .result-box {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
 
-        .download-btn {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-            font-family: 'Fira Code', monospace;
-        }
+      .download-btn {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        font-family: "Fira Code", monospace;
+      }
 
-        .download-btn:hover {
-            background-color: var(--primary-color);
-            color: black;
-        }
+      .download-btn:hover {
+        background-color: var(--primary-color);
+        color: black;
+      }
 
-        .error-message {
-            background-color: #ff5555;
-            border-left: 4px solid #ff5555;
-            color: white;
-        }
+      .error-message {
+        background-color: #ff5555;
+        border-left: 4px solid #ff5555;
+        color: white;
+      }
 
-        .language-select {
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            transition: border-color 0.2s ease;
-            cursor: pointer;
-            font-family: 'Fira Code', monospace;
-        }
+      .language-select {
+        background-color: var(--input-bg);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: border-color 0.2s ease;
+        cursor: pointer;
+        font-family: "Fira Code", monospace;
+      }
 
-        .language-select:focus {
-            border-color: var(--primary-color);
-        }
+      .language-select:focus {
+        border-color: var(--primary-color);
+      }
 
-        .model-select {
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            transition: border-color 0.2s ease;
-            cursor: pointer;
-            font-family: 'Fira Code', monospace;
-        }
+      .model-select {
+        background-color: var(--input-bg);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: border-color 0.2s ease;
+        cursor: pointer;
+        font-family: "Fira Code", monospace;
+      }
 
-        .model-select:focus {
-            border-color: var(--primary-color);
-        }
+      .model-select:focus {
+        border-color: var(--primary-color);
+      }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
+      .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
 
-        .code-output {
-            background-color: #222;
-            color: #ffffff;
-            border-radius: 8px;
-            padding: 1rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-            overflow-x: auto;
-        }
+      .code-output {
+        background-color: #222;
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 1rem;
+        font-family: "Fira Code", monospace;
+        font-size: 1rem;
+        overflow-x: auto;
+      }
     </style>
-</head>
+  </head>
 
-<body class="min-h-screen p-4 md:p-6">
+  <body class="min-h-screen p-4 md:p-6">
     <div class="container mx-auto max-w-4xl">
-        <h1 class="text-3xl md:text-4xl font-bold text-center mb-8 text-[#ffffff]">
-            JV ChatBot
-            <span class="text-sm font-normal text-gray-500 block mt-2">MULTIMODAL CHATBOT</span>
-        </h1>
+      <h1
+        class="text-3xl md:text-4xl font-bold text-center mb-8 text-[#ffffff]"
+      >
+        JV ChatBot
+        <span class="text-sm font-normal text-gray-500 block mt-2"
+          >MULTIMODAL CHATBOT</span
+        >
+      </h1>
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="error-message p-4 rounded-lg mb-6">
-                    {% for message in messages %}
-                        <p class="flex items-center gap-2">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ message }}
-                        </p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="error-message p-4 rounded-lg mb-6">
+        {% for message in messages %}
+        <p class="flex items-center gap-2">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ message }}
+        </p>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
 
-        <div class="chat-container">
-            <div class="command-hint p-4 mb-6">
-                <h3 class="font-semibold mb-3 text-[#ffffff]">Comandos Disponíveis</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex items-center gap-2">
-                        <span class="command-tag" onclick="insertCommand('$imagem')">$imagem</span>
-                        <span class="text-sm text-gray-500">Gerar uma imagem</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="command-tag" onclick="insertCommand('$codigo')">$codigo</span>
-                        <span class="text-sm text-gray-500">Gerar código</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="command-tag" onclick="insertCommand('$resumo')">$resumo</span>
-                        <span class="text-sm text-gray-500">Resumir texto</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="command-tag" onclick="insertCommand('$traduzir')">$traduzir</span>
-                        <span class="text-sm text-gray-500">Traduzir texto</span>
-                    </div>
-                </div>
+      <div class="chat-container">
+        <div class="command-hint p-4 mb-6">
+          <h3 class="font-semibold mb-3 text-[#ffffff]">
+            Comandos Disponíveis
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center gap-2">
+              <span class="command-tag" onclick="insertCommand('$imagem')"
+                >$imagem</span
+              >
+              <span class="text-sm text-gray-500">Gerar uma imagem</span>
             </div>
-
-            <form action="{{ url_for('process_prompt') }}" method="post" class="space-y-4" id="chat-form">
-                <textarea 
-                    id="prompt-text" 
-                    name="unified_prompt" 
-                    class="w-full p-4 rounded-lg focus:outline-none" 
-                    rows="5" 
-                    required 
-                    placeholder="Digite seu comando seguido do prompt..."
-                ></textarea>
-
-                <div class="mt-4">
-                    <label for="language-select" class="block text-sm text-gray-300">Traduzir pt/br para:</label>
-                    <select name="language" id="language-select" class="language-select" onchange="updatePrompt()">
-                        <option value="en">Inglês (en)</option>
-                        <option value="es">Espanhol (es)</option>
-                        <option value="fr">Francês (fr)</option>
-                        <option value="de">Alemão (de)</option>
-                        <option value="it">Italiano (it)</option>
-                        <option value="pt">Português (pt)</option>
-                        <option value="ru">Russo (ru)</option>
-                        <option value="ja">Japonês (ja)</option>
-                        <option value="zh-CN">Chinês (zh-CN)</option>
-                    </select>
-                </div>
-
-                <div class="mt-4">
-                    <label for="model-select" class="block text-sm text-gray-300">Selecione o Modelo de Imagem:</label>
-                    <select name="image_model" id="model-select" class="model-select">
-                      {% for model in modelos_imagem %}
-                        <option value="{{ model }}">{{ model }}</option>
-                      {% endfor %}
-                    </select>
-                </div>
-
-                <div class="button-container mt-6">
-                    <button type="submit" class="submit-btn text-white font-medium flex justify-center items-center text-lg transition-all duration-300 hover:scale-105">
-                        <i class="fas fa-paper-plane mr-2"></i> Enviar
-                    </button>
-                </div>
-            </form>
-
-            {% if result %}
-                <div class="result-box mt-8 p-6">
-                    <div class="flex items-center gap-2 mb-4">
-                        {% if result_type == 'image' %}
-                            <i class="fas fa-image text-primary-color"></i>
-                        {% elif result_type == 'code' %}
-                            <i class="fas fa-code text-primary-color"></i>
-                        {% elif result_type == 'summary' %}
-                            <i class="fas fa-file-alt text-primary-color"></i>
-                        {% elif result_type == 'translation' %}
-                            <i class="fas fa-language text-primary-color"></i>
-                        {% endif %}
-                        <h3 class="font-semibold text-lg">
-                            {% if result_type == 'image' %}Imagem Gerada
-                            {% elif result_type == 'code' %}Código Gerado
-                            {% elif result_type == 'summary' %}Resumo
-                            {% elif result_type == 'translation' %}Tradução
-                            {% endif %}
-                        </h3>
-                    </div>
-
-                    {% if result_type == 'image' %}
-                        <div class="relative">
-                            <img src="{{ url_for('static', filename='generated_images/' + image_name) }}" 
-                                 alt="Imagem Gerada" 
-                                 class="w-full rounded-lg shadow-sm">
-                            <a href="{{ url_for('static', filename='generated_images/' + image_name) }}" 
-                               download 
-                               class="download-btn mt-4">
-                                <i class="fas fa-download"></i>
-                                <span>Download</span>
-                            </a>
-                        </div>
-                    {% elif result_type == 'code' %}
-                        <pre class="code-output">{{ result }}</pre>
-                    {% else %}
-                        <p class="text-gray-200 leading-relaxed">{{ result }}</p>
-                    {% endif %}
-                </div>
-            {% endif %}
+            <div class="flex items-center gap-2">
+              <span class="command-tag" onclick="insertCommand('$codigo')"
+                >$codigo</span
+              >
+              <span class="text-sm text-gray-500">Gerar código</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="command-tag" onclick="insertCommand('$resumo')"
+                >$resumo</span
+              >
+              <span class="text-sm text-gray-500">Resumir texto</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="command-tag" onclick="insertCommand('$traduzir')"
+                >$traduzir</span
+              >
+              <span class="text-sm text-gray-500">Traduzir texto</span>
+            </div>
+          </div>
         </div>
+
+        <form
+          action="{{ url_for('process_prompt') }}"
+          method="post"
+          class="space-y-4"
+          id="chat-form"
+        >
+          <textarea
+            id="prompt-text"
+            name="unified_prompt"
+            class="w-full p-4 rounded-lg focus:outline-none"
+            rows="5"
+            required
+            placeholder="Digite seu comando seguido do prompt..."
+          ></textarea>
+
+          <div class="mt-4">
+            <label for="language-select" class="block text-sm text-gray-300"
+              >Traduzir pt/br para:</label
+            >
+            <select
+              name="language"
+              id="language-select"
+              class="language-select"
+              onchange="updatePrompt()"
+            >
+              <option value="en">Inglês (en)</option>
+              <option value="es">Espanhol (es)</option>
+              <option value="fr">Francês (fr)</option>
+              <option value="de">Alemão (de)</option>
+              <option value="it">Italiano (it)</option>
+              <option value="pt">Português (pt)</option>
+              <option value="ru">Russo (ru)</option>
+              <option value="ja">Japonês (ja)</option>
+              <option value="zh-CN">Chinês (zh-CN)</option>
+            </select>
+          </div>
+
+          <div class="mt-4">
+            <label for="model-select" class="block text-sm text-gray-300"
+              >Selecione o Modelo de Imagem:</label
+            >
+            <select name="image_model" id="model-select" class="model-select">
+              {% for model in modelos_imagem %}
+              <option value="{{ model }}">{{ model }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="button-container mt-6">
+            <button
+              type="submit"
+              class="submit-btn text-white font-medium flex justify-center items-center text-lg transition-all duration-300 hover:scale-105"
+            >
+              <i class="fas fa-paper-plane mr-2"></i> Enviar
+            </button>
+          </div>
+        </form>
+
+        {% if result %}
+        <div class="result-box mt-8 p-6">
+          <div class="flex items-center gap-2 mb-4">
+            {% if result_type == 'image' %}
+            <i class="fas fa-image text-primary-color"></i>
+            {% elif result_type == 'code' %}
+            <i class="fas fa-code text-primary-color"></i>
+            {% elif result_type == 'summary' %}
+            <i class="fas fa-file-alt text-primary-color"></i>
+            {% elif result_type == 'translation' %}
+            <i class="fas fa-language text-primary-color"></i>
+            {% endif %}
+            <h3 class="font-semibold text-lg">
+              {% if result_type == 'image' %}Imagem Gerada {% elif result_type
+              == 'code' %}Código Gerado {% elif result_type == 'summary'
+              %}Resumo {% elif result_type == 'translation' %}Tradução {% endif
+              %}
+            </h3>
+          </div>
+
+          {% if result_type == 'image' %}
+          <div class="relative">
+            <img
+              src="{{ url_for('static', filename='generated_images/' + image_name) }}"
+              alt="Imagem Gerada"
+              class="w-full rounded-lg shadow-sm"
+            />
+            <a
+              href="{{ url_for('static', filename='generated_images/' + image_name) }}"
+              download
+              class="download-btn mt-4"
+            >
+              <i class="fas fa-download"></i>
+              <span>Download</span>
+            </a>
+          </div>
+          {% elif result_type == 'code' %}
+          <pre class="code-output">{{ result }}</pre>
+          {% else %}
+          <p class="text-gray-200 leading-relaxed">{{ result }}</p>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
     </div>
 
     <script>
-        function insertCommand(command) {
-            var promptText = document.getElementById('prompt-text');
-            var currentText = promptText.value;
-            promptText.value = currentText + " " + command + " ";
-            promptText.focus();
-        }
+      function insertCommand(command) {
+        var promptText = document.getElementById("prompt-text");
+        var currentText = promptText.value;
+        promptText.value = currentText + " " + command + " ";
+        promptText.focus();
+      }
 
-        function updatePrompt() {
-            var langSelect = document.getElementById('language-select');
-            var langCode = langSelect.value;
-            var promptText = document.getElementById('prompt-text');
-            promptText.value = '$traduzir.' + langCode + ' ' + promptText.value;
-        }
+      function updatePrompt() {
+        var langSelect = document.getElementById("language-select");
+        var langCode = langSelect.value;
+        var promptText = document.getElementById("prompt-text");
+        promptText.value = "$traduzir." + langCode + " " + promptText.value;
+      }
 
-        document.getElementById('chat-form').addEventListener('keydown', function (event) {
-            if (event.key === 'Enter' && !event.shiftKey) { 
-                event.preventDefault(); 
-                document.querySelector('button[type="submit"]').click(); 
-            }
+      document
+        .getElementById("chat-form")
+        .addEventListener("keydown", function (event) {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            document.querySelector('button[type="submit"]').click();
+          }
         });
     </script>
-</body>
-
+  </body>
 </html>
-
