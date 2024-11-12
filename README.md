@@ -55,7 +55,7 @@ Example:
 
 $imagem A cat sitting on a chair
 
-$codigo Write a function that reverses a string
+$codigo Write a function that reverses a string in python
 
 $resumo This is a long text that needs to be summarized
 
