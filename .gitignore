@@ -12,6 +12,8 @@ env/
 venv/
 ENV/
 
+/static/generated_images/
+
 # Arquivos específicos do ambiente virtual
 pip-log.txt
 pip-delete-this-directory.txt
