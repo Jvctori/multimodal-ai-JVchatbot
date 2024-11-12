@@ -1,0 +1,45 @@
+# Ambiente Virtual Python - todos os padrões comuns
+/bin/
+/lib/
+/lib64
+/include/
+/share/
+/Scripts/
+pyvenv.cfg
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Arquivos específicos do ambiente virtual
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Diretório de imagens geradas
+/static/generated_images/
+
+# Arquivos de dependências
+requirements.txt.lock
+pip-selfcheck.json
+
+# IDEs e editores (opcional)
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
