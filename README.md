@@ -59,7 +59,7 @@ $codigo Write a function that reverses a string
 
 $resumo This is a long text that needs to be summarized
 
-$traduzir Hello, how are you?
+$traduzir Hello, how are you? (to translate to portuguese)
 
 $traduzir.ru Oi, como você esta? (to translate to russian)
 
