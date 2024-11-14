@@ -15,7 +15,7 @@ It is recommended to use a virtual environment to manage dependencies. To create
 
 #### On Windows:
 ```bash
-python -m venv venv
+python -m venv .
 venv\Scripts\activate
 ```
 
