@@ -68,7 +68,6 @@ class AiServices:
         return translation.text
         
     def code_generator(self, prompt):
-        """Versão que retorna todo o texto concatenado"""
         try:
             api_url = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-Coder-32B-Instruct/v1/chat/completions"
             
