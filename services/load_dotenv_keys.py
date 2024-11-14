@@ -1,7 +1,8 @@
 from dotenv import load_dotenv
 import os
+from typing import Tuple
 
-def load_dotenv_keys():
+def load_dotenv_keys() -> Tuple[str,str]:
 
     load_dotenv()
 

@@ -8,7 +8,7 @@ from datetime import datetime
 from googletrans import Translator
 
 class AiServices:
-    def __init__(self, api_token):
+    def __init__(self, api_token) -> None:
         self.api_token = api_token
         self.headers = {
             "Authorization": f"Bearer {api_token}",
@@ -16,13 +16,13 @@ class AiServices:
         }
         self.translator = Translator()
         
-    def hash_img(self, prompt, modelo_imagem):
+    def hash_img(self, prompt: str, modelo_imagem: str) -> str:
         timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
         hash_input = f"{prompt}{modelo_imagem}{timestamp}".encode("utf-8")
         filename = hashlib.md5(hash_input).hexdigest()
         return f"{filename}.png"
         
-    def generate_img(self, prompt, modelo_imagem):
+    def generate_img(self, prompt: str, modelo_imagem: str) -> str:
         try:
             prompt_en = self.translate_prompt(prompt, tgt_lang="en")
             api_url = f"https://api-inference.huggingface.co/models/{modelo_imagem}"
@@ -58,7 +58,7 @@ class AiServices:
         except Exception as e:
             raise Exception(f"Image generation failed: {str(e)}")
         
-    def translate_prompt(self, prompt, tgt_lang="pt", force_translation=True):
+    def translate_prompt(self, prompt: str, tgt_lang: str ="pt", force_translation: bool = True) -> str:
         if not force_translation:
             return prompt
         detected_lang = self.translator.detect(prompt).lang
@@ -67,7 +67,7 @@ class AiServices:
         )
         return translation.text
         
-    def code_generator(self, prompt):
+    def code_generator(self, prompt: str) -> str:
         """Versão que retorna todo o texto concatenado"""
         try:
             api_url = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-Coder-32B-Instruct/v1/chat/completions"
@@ -119,7 +119,7 @@ class AiServices:
             return f"Generation failed: {str(e)}"
 
             
-    def summarize_text(self, prompt, force_translation=True):
+    def summarize_text(self, prompt: str, force_translation: bool =True) -> str:
         try:
             api_url = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
             
