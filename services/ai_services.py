@@ -32,13 +32,7 @@ class AiServices:
                 prompt_en = self.translate_prompt(prompt, tgt_lang="en")
 
             api_url = f"https://api-inference.huggingface.co/models/{modelo_imagem}"
-            
-            print(f"\n=== DEBUG INFORMAÇÃO DA GERAÇÃO DE IMAGEM ===")
-            print(f"Modelo sendo usado: {modelo_imagem}")
-            print(f"Prompt recebido: {prompt}")
-            print(f"Prompt em inglês: {prompt_en}")
-            print("============================================\n")
-            
+
             response = requests.post(
                 api_url,
                 headers=self.headers,
