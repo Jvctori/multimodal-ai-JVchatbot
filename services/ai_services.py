@@ -24,7 +24,13 @@ class AiServices:
         
     def generate_img(self, prompt: str, modelo_imagem: str) -> str:
         try:
-            prompt_en = self.translate_prompt(prompt, tgt_lang="en")
+            detect_src_lang = self.translator.detect(prompt)
+
+            if detect_src_lang == "en":
+                prompt_en = prompt
+            else:
+                prompt_en = self.translate_prompt(prompt, tgt_lang="en")
+
             api_url = f"https://api-inference.huggingface.co/models/{modelo_imagem}"
             
             print(f"\n=== DEBUG INFORMAÇÃO DA GERAÇÃO DE IMAGEM ===")
