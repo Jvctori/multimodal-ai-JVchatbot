@@ -32,9 +32,6 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Diretório de imagens geradas
-/static/generated_images/
-
 # Arquivos de dependências
 requirements.txt.lock
 pip-selfcheck.json
