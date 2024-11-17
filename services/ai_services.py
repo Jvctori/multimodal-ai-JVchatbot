@@ -67,7 +67,7 @@ class AiServices:
         )
         return translation.text
         
-    def code_generator(self, prompt):
+    def code_generator(self, prompt:str) -> str:
         try:
             api_url = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-Coder-32B-Instruct/v1/chat/completions"
             
@@ -79,7 +79,7 @@ class AiServices:
                         "content": prompt
                     }
                 ],
-                "max_tokens": 500,
+                "max_tokens": 2000,
                 "stream": True
             }
             
